@@ -1,0 +1,51 @@
+{
+  "name": "payments-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API de cobran\u00e7as com Clean Architecture e integra\u00e7\u00e3o Mercado Pago",
+  "engines": {
+    "node": ">=22.16 <25"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node --env-file-if-exists=.env dist/main.js",
+    "dev": "npm run build && npm start",
+    "worker": "node --env-file-if-exists=.env dist/worker.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "tsc -p tsconfig.test.json && node --test --test-reporter=spec .test-build/test/*.test.js",
+    "test:coverage": "tsc -p tsconfig.test.json && node --experimental-test-coverage --test-coverage-include=\".test-build/src/**\" --test --test-reporter=spec .test-build/test/*.test.js",
+    "test:integration": "tsc -p tsconfig.test.json && node scripts/integration.mjs",
+    "db:migrate": "npm run build && node --env-file-if-exists=.env dist/infrastructure/database/migrate.js",
+    "jobs:retry": "node --env-file-if-exists=.env dist/infrastructure/jobs/retry.js",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm test && npm run build"
+  },
+  "dependencies": {
+    "@nestjs/common": "^12.1.1",
+    "@nestjs/core": "^12.1.1",
+    "@nestjs/platform-express": "^12.1.1",
+    "@nestjs/swagger": "^12.0.2",
+    "express": "^5.2.1",
+    "helmet": "^8.3.0",
+    "pg": "^8.23.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/express": "^5.0.6",
+    "@types/node": "^22.20.4",
+    "@types/pg": "^8.23.1",
+    "@types/supertest": "^7.2.1",
+    "embedded-postgres": "^18.4.0-beta.17",
+    "eslint": "^10.11.0",
+    "prettier": "^3.9.9",
+    "supertest": "^7.3.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.71.0"
+  },
+  "type": "module"
+}

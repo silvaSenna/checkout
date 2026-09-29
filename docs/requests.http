@@ -1,0 +1,48 @@
+@baseUrl = http://localhost:3000
+@apiKey = change-me-use-a-random-key-of-at-least-32-chars
+@paymentId = substitua-pelo-uuid-retornado
+
+### Criar PIX
+POST {{baseUrl}}/api/payment
+x-api-key: {{apiKey}}
+Idempotency-Key: exemplo-pix-0001
+Content-Type: application/json
+
+{
+  "cpf": "52998224725",
+  "description": "Assinatura mensal",
+  "amount": "150.90",
+  "paymentMethod": "PIX"
+}
+
+### Consultar e obter ETag
+GET {{baseUrl}}/api/payment/{{paymentId}}
+x-api-key: {{apiKey}}
+
+### Liquidar PIX pendente; substitua a versão pelo ETag atual
+PUT {{baseUrl}}/api/payment/{{paymentId}}
+x-api-key: {{apiKey}}
+If-Match: "1"
+Content-Type: application/json
+
+{"status":"PAID"}
+
+### Filtrar
+GET {{baseUrl}}/api/payment?cpf=52998224725&paymentMethod=PIX&limit=20
+x-api-key: {{apiKey}}
+
+### Criar cartão; requer configuração MP e worker
+POST {{baseUrl}}/api/payment
+x-api-key: {{apiKey}}
+Idempotency-Key: exemplo-cartao-0001
+Content-Type: application/json
+
+{
+  "cpf": "52998224725",
+  "description": "Compra de teste",
+  "amount": "150.90",
+  "paymentMethod": "CREDIT_CARD"
+}
+
+### Readiness
+GET {{baseUrl}}/health/ready
